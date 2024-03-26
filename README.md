@@ -1,6 +1,4 @@
-Assignment 2, SDJ2
-
-(MVVM, Observer, Sockets)
+Assignment 2, SDJ2 (MVVM, Observer, Sockets)
 
 The assignment:
 
