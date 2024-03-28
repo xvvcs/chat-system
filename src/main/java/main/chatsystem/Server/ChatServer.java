@@ -20,7 +20,7 @@ public class ChatServer {
             System.out.println("Waiting for a client...");
             // Waiting for contacting with the client
             Socket socket = serverSocket.accept();
-            ChatCommunicator communicator = new ChatCommunicator(socket);
+            ChatCommunicator communicator = new ChatCommunicator(socket, broadcaster);
             Thread thread = new Thread(communicator);
             thread.start();
         }
