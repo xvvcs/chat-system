@@ -40,8 +40,7 @@ public class ChatClientImplementation implements ChatClient {
             throw new IOException("Protocol failure");
         }
         socket.close();
-        MessageListener.close();
-        
+
     }
 
     @Override
