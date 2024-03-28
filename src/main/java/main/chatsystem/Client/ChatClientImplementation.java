@@ -65,6 +65,9 @@ public class ChatClientImplementation implements ChatClient {
     @Override
     public void sendMessage(String messageContent, User user) throws IOException{
 
+        writer.println("Send message");
+        writer.flush();
+
         if (user == null){
             throw new IllegalArgumentException("Error while sending message: user is null");
         }

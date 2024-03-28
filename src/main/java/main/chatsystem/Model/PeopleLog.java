@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class PeopleLog implements Serializable {
 
     private static PeopleLog instance;
-    private ArrayList<User> users = new ArrayList<User>();
-    private ArrayList<String> nicknames = new ArrayList<String>();
+    private ArrayList<User> users;
+    private ArrayList<String> nicknames;
 
     private PeopleLog(){
         this.users = new ArrayList<>();
@@ -23,10 +23,7 @@ public class PeopleLog implements Serializable {
     }
 
     public synchronized void addUser(User user){
-        for (int i = 0; i < users.size(); i++){
-            if(users.get(i).equals(user)){
-                return;
-            }
+        if (!users.contains(user)) {
             users.add(user);
             nicknames.add(user.getNickname());
         }

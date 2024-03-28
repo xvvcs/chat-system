@@ -26,12 +26,12 @@ public class ChatCommunicator implements Runnable {
         this.gson =  new Gson();
 
         this.peopleLog = PeopleLog.getInstance();
-        this.file = new File("src/main/java/main/chatsystem/File");
+        this.file = new File("src/main/java/main/chatsystem/File/ChatLog");
         this.fileLog = FileLog.getInstance(file);
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         Gson gson = new Gson();
         try {
             while (true) {
@@ -66,6 +66,18 @@ public class ChatCommunicator implements Runnable {
                         System.out.println("Logging procedure failure");
                         writer.flush();
                     }
+                    String reply = reader.readLine();
+                    if(reply.equals("Disconnect"))
+                    {
+                        writer.println("Disconnected");
+                        writer.flush();
+                        break;
+                    }
+                    else if(reply.equals("Send message")) // Może się to zmienić podczas implementacji Java FX
+                    {
+                        System.out.println("Message from client: " + reply);
+                    }
+
                 }
                 catch (JsonSyntaxException e)
                 {
