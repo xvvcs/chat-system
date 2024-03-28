@@ -1,6 +1,8 @@
 package main.chatsystem.Model;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
     private final String message;
 
     public Message(String message) {

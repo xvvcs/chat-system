@@ -41,6 +41,7 @@ public class ChatCommunicator implements Runnable {
                         writer.println("Approved");
                         System.out.println("Logged successfully");
                         writer.flush();
+                        broadcaster.broadcast("User " + login.getNickname() + " has joined the chat.");
                     }
                     else
                     {

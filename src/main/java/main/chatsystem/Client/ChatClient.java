@@ -7,8 +7,10 @@ import java.beans.PropertyChangeListener;
 
 public interface ChatClient {
     void disconnect() throws IOException;
-    void login(String username, String password);
-    void sendMessage(String message, User user);
+    boolean login(String username, String password) throws IOException;
+    void sendMessage(String message, User user) throws IOException;
+
+    void addUser(User user) throws IOException;
     void addPropertyChangeListener(PropertyChangeListener listener);
     void removePropertyChangeListener(PropertyChangeListener listener);
     void receiveBroadcast(Object object);
