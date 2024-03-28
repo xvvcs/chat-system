@@ -1,23 +1,33 @@
 package main.chatsystem.Server;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import main.chatsystem.File.FileLog;
 import main.chatsystem.Model.Model;
+import main.chatsystem.Model.PeopleLog;
 import main.chatsystem.Model.User;
 
 public class ChatCommunicator implements Runnable {
     private final Socket socket;
     private final UDPBroadcaster broadcaster;
     private final Gson gson;
-    private final Model model; // nie wiadomo czy trzeba tu model
+
+    private FileLog fileLog;
+    private File file;
+    private final PeopleLog peopleLog;
     public ChatCommunicator(Socket socket, UDPBroadcaster broadcaster){
         this.socket = socket;
         this.broadcaster = broadcaster;
         this.gson =  new Gson();
+
+        this.peopleLog = PeopleLog.getInstance();
+        this.file = new File("src/main/java/main/chatsystem/File");
+        this.fileLog = FileLog.getInstance(file);
     }
 
     @Override
@@ -43,6 +53,12 @@ public class ChatCommunicator implements Runnable {
                         System.out.println("Logged successfully");
                         writer.flush();
                         broadcaster.broadcast("User " + login.getNickname() + " has joined the chat.");
+
+                        //dodaje ziuta do Userow - PEWNIE NIE DZIALA
+                        peopleLog.addUser(login);
+                        broadcaster.broadcast(peopleLog.toString());
+
+                        fileLog.log("User " + login.getNickname() + " has joined the chat."); // <<<<< TU POWINIEN BYC MESSAGE WYSLANY JSONEM
                     }
                     else
                     {
