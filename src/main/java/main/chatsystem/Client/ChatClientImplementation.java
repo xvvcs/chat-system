@@ -78,7 +78,7 @@ public class ChatClientImplementation implements ChatClient {
         writer.println(messageJSON);
         writer.flush();
 
-        this.support.firePropertyChange("Message sent", null, message.getMessage());
+        this.support.firePropertyChange("MessageSent", null, message.getMessage());
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ChatClientImplementation implements ChatClient {
         writer.println(userJSON);
         writer.flush();
 
-        this.support.firePropertyChange("User added", null, user.getNickname());
+        this.support.firePropertyChange("UserAdded", null, user.getNickname());
     }
 
     @Override
