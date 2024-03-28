@@ -1,7 +1,7 @@
 package main.chatsystem.Server;
 
 import java.net.Socket;
-import com.google.gson.GSON;
+import com.google.gson.Gson;
 
 public class ChatCommunicator implements Runnable {
     private final Socket socket;
@@ -12,5 +12,10 @@ public class ChatCommunicator implements Runnable {
         this.socket = socket;
         this.broadcaster = broadcaster;
         this.gson =  new Gson();
+    }
+
+    @Override
+    public void run() {
+
     }
 }
