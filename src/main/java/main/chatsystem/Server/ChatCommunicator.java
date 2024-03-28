@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import main.chatsystem.Model.Model;
 import main.chatsystem.Model.User;
 
 public class ChatCommunicator implements Runnable {
