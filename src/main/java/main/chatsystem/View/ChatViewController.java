@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import main.chatsystem.Model.Message;
-import main.chatsystem.Viewmodel.LoginViewModel;
+import main.chatsystem.Viewmodel.ChatViewModel;
 
 public class ChatViewController {
     @FXML private Label usernameLabel;
