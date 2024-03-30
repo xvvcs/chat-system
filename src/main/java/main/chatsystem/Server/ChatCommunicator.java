@@ -8,6 +8,7 @@ import java.net.Socket;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import main.chatsystem.File.FileLog;
+import main.chatsystem.Model.Message;
 import main.chatsystem.Model.Model;
 import main.chatsystem.Model.PeopleLog;
 import main.chatsystem.Model.User;
@@ -45,7 +46,7 @@ public class ChatCommunicator implements Runnable {
                     break;
                 }
                 System.out.println("POLACZYLO");
-                fileLog.log("User " + socket.getInetAddress() + " has connected.");
+                fileLog.log("User from " + socket.getInetAddress() + " has connected.");
                 writer.println("login required");
                 writer.flush();
                 String loginData = reader.readLine();
@@ -55,12 +56,14 @@ public class ChatCommunicator implements Runnable {
                         writer.println("Approved");
                         System.out.println("Logged successfully");
                         writer.flush();
-                        broadcaster.broadcast(loginData);
 
-                        //dodaje ziuta do Userow - PEWNIE NIE DZIALA
+
+                        broadcaster.broadcast(loginData); //User data in broadacaster
+
+
                         peopleLog.addUser(login);
 
-                        fileLog.log(socket.getInetAddress()+" User " + login.getNickname() + " has joined the chat."); // <<<<< TU POWINIEN BYC MESSAGE WYSLANY JSONEM
+                        fileLog.log(socket.getInetAddress()+" User " + login.getNickname() + " has joined the chat.");
                     }
                     else
                     {
@@ -68,19 +71,27 @@ public class ChatCommunicator implements Runnable {
                         System.out.println("Logging procedure failure");
                         writer.flush();
                     }
+
                     String reply = reader.readLine();
+
                     if(reply.equals("Disconnect"))
                     {
+
                         writer.println("Disconnected");
                         writer.flush();
-                        broadcaster.broadcast(login.getNickname() + " has disconnected.");
+
+                       String leftBroadcast= reader.readLine();
+                        broadcaster.broadcast(leftBroadcast);
+
                         fileLog.log(socket.getInetAddress()+" User " + login.getNickname() + " has left the chat.");
                         break;
                     }
-                    else if(reply.equals("Send message")) // Może się to zmienić podczas implementacji Java FX
+                    else if(reply.equals("Send message"))
                     {
                         System.out.println("Message from client: " + reply);
                     }
+
+
 
                 }
                 catch (JsonSyntaxException e)
