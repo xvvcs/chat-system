@@ -28,7 +28,7 @@ public class LoginViewModel{
     {
         try
         {
-            model.login(userName.getName(), password.get());  // model login method may be String instead of void (Olivier example)
+            model.login(userName.get(), password.get());  // model login method may be String instead of void (Olivier example)
 
         }
         catch (Exception e)

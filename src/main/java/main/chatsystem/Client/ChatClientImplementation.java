@@ -114,8 +114,12 @@ public class ChatClientImplementation implements ChatClient {
     @Override
     public void receiveBroadcast(String message) {
         try {
+            // Print the received message for debugging
+            System.out.println("Received message: " + message);
+
             // Attempt to parse the message as JSON
             Message messageObject = gson.fromJson(message, Message.class);
+
             // If parsing succeeds, fire property change event
             support.firePropertyChange("result", null, messageObject);
         } catch (JsonSyntaxException e) {

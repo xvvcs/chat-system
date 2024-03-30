@@ -55,7 +55,7 @@ public class ChatCommunicator implements Runnable {
                         writer.println("Approved");
                         System.out.println("Logged successfully");
                         writer.flush();
-                        broadcaster.broadcast("User " + login.getNickname() + " has joined the chat.");
+                        broadcaster.broadcast(loginData);
 
                         //dodaje ziuta do Userow - PEWNIE NIE DZIALA
                         peopleLog.addUser(login);
