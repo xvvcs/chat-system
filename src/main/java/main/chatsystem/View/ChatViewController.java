@@ -23,10 +23,9 @@ public class ChatViewController {
         this.chatViewModel = chatViewModel;
         this.root = root;
 
-        // loginViewModel.addPropertyChangeListener(this);
-        //
-        // loginViewModel.bindUsername(userNameField.textProperty());
-        // loginViewModel.bindPassword(passwordField.textProperty());
+
+        loginViewModel.bindUsername(userNameField.textProperty());
+        loginViewModel.bindPassword(passwordField.textProperty());
     }
     @FXML public void onSend()
     {

@@ -34,7 +34,7 @@ public class LoginViewModel {
             message.setValue(e.getMessage());
         }
     }
-    public void bindUserName(StringProperty property)
+    public void bindUsername(StringProperty property)
     {
         userName.bindBidirectional(property);
     }
