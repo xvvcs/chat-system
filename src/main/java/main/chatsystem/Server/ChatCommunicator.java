@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import main.chatsystem.File.FileLog;
@@ -21,10 +22,12 @@ public class ChatCommunicator implements Runnable {
     private FileLog fileLog;
     private File file;
     private final PeopleLog peopleLog;
-    public ChatCommunicator(Socket socket, UDPBroadcaster broadcaster){
+    private String username;
+
+    public ChatCommunicator(Socket socket, UDPBroadcaster broadcaster) {
         this.socket = socket;
         this.broadcaster = broadcaster;
-        this.gson =  new Gson();
+        this.gson = new Gson();
 
         this.peopleLog = PeopleLog.getInstance();
         this.file = new File("src/main/java/main/chatsystem/File/ChatLog");
@@ -38,75 +41,71 @@ public class ChatCommunicator implements Runnable {
             while (true) {
                 BufferedReader reader = StreamsFactory.createReader(socket);
                 PrintWriter writer = StreamsFactory.createWriter(socket);
-                String method = reader.readLine();
-                System.out.println("PROBUHJE POLACZYC");
-                if (method == null || !method.equals("connect")) {
-                    writer.println("Disconnected");
+                String firstReply = reader.readLine();
+
+                if (firstReply.equals("connect")) {
+                    System.out.println("CONNECTED");
+                    fileLog.log("User from " + socket.getInetAddress() + " has connected.");
+                    writer.println("login required");
                     writer.flush();
-                    break;
-                }
-                System.out.println("POLACZYLO");
-                fileLog.log("User from " + socket.getInetAddress() + " has connected.");
-                writer.println("login required");
-                writer.flush();
-                String loginData = reader.readLine();
-                try{
-                    User login = gson.fromJson(loginData,User.class);
-                    if(!login.getNickname().isEmpty() || !login.getPassword().isEmpty()) {
-                        writer.println("Approved");
-                        System.out.println("Logged successfully");
-                        writer.flush();
+                    String loginData = reader.readLine();
+                    try {
+                        User login = gson.fromJson(loginData, User.class);
+                        username = login.getNickname();
+                        if (!login.getNickname().isEmpty() || !login.getPassword().isEmpty())
+                        {
+                            writer.println("Approved");
+                            System.out.println("Logged successfully");
+                            writer.flush();
 
 
-                        broadcaster.broadcast(loginData); //User data in broadacaster
+                            broadcaster.broadcast(loginData); //User data in broadacaster
 
 
-                        peopleLog.addUser(login);
+                            peopleLog.addUser(login);
 
-                        fileLog.log(socket.getInetAddress()+" User " + login.getNickname() + " has joined the chat.");
+                            fileLog.log(socket.getInetAddress() + " User " + login.getNickname() + " has joined the chat.");
+                        }
+                        else
+                        {
+                            writer.println("Disapproved");
+                            System.out.println("Logging procedure failure");
+                            writer.flush();
+                        }
                     }
-                    else
+                    catch (JsonSyntaxException e)
                     {
-                        writer.println("Disapproved");
-                        System.out.println("Logging procedure failure");
-                        writer.flush();
-                    }
-
-                    String reply = reader.readLine();
-
-                    if(reply.equals("Disconnect"))
-                    {
-
                         writer.println("Disconnected");
                         writer.flush();
-
-                       String leftBroadcast= reader.readLine();
-                        broadcaster.broadcast(leftBroadcast);
-
-                        fileLog.log(socket.getInetAddress()+" User " + login.getNickname() + " has left the chat.");
-                        break;
+                        e.printStackTrace();
                     }
-                    else if(reply.equals("Send message"))
-                    {
-                        System.out.println("Message from client: " + reply);
-                    }
-
-
-
                 }
-                catch (JsonSyntaxException e)
+                if (firstReply.equals("Disconnect"))
                 {
+
                     writer.println("Disconnected");
                     writer.flush();
-                    e.printStackTrace();
-                }
 
+                    String leftBroadcast = reader.readLine();
+                    broadcaster.broadcast(leftBroadcast);
+
+                    fileLog.log(socket.getInetAddress() + " User " + username + " has left the chat.");
+                    break;
+                }
+                if (firstReply.equals("Send message")) {
+                    writer.println("a");
+                    writer.flush();
+                    System.out.println("3");
+                    String messageContent = reader.readLine();
+                    System.out.println("4");
+                    Message jSonMessage = gson.fromJson(messageContent, Message.class);
+                    broadcaster.broadcast(messageContent);
+
+                }
             }
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 socket.close();
             } catch (IOException e) {

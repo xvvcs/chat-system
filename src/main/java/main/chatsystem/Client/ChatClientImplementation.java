@@ -39,7 +39,7 @@ public class ChatClientImplementation implements ChatClient {
     }
 
     @Override
-    public void disconnect() throws IOException {
+    public synchronized void  disconnect() throws IOException {
         writer.println("Disconnect");
         writer.flush();
         String reply = reader.readLine();
@@ -58,7 +58,7 @@ public class ChatClientImplementation implements ChatClient {
     }
 
     @Override
-    public boolean login(String username, String password) throws IOException{
+    public  synchronized boolean login(String username, String password) throws IOException{
         writer.println("connect");
         writer.flush();
         String reply = reader.readLine();
@@ -77,25 +77,35 @@ public class ChatClientImplementation implements ChatClient {
     }
 
     @Override
-    public void sendMessage(String messageContent, User user) throws IOException{
+    public synchronized void sendMessage(String messageContent, User user) throws IOException{
 
         writer.println("Send message");
         writer.flush();
 
+        /* User jest null i przez to nie da się wysłać wiadomości */
+
         if (user == null){
+            System.out.println("user null");
             throw new IllegalArgumentException("Error while sending message: user is null");
         }
         if (messageContent == null){
+            System.out.println("message null");
             throw new IllegalArgumentException("Error while sending message: message is empty");
         }
+        String reply = reader.readLine();
+        if(!reply.equals("a"))
+        {
+            System.out.println("chuj");
+        }
+        System.out.println("1");
+        Message message = new Message(user.getNickname() + " : " + messageContent);
 
-        Message message = new Message(messageContent);
-
-        String messageJSON = gson.toJson(message + "from: " + user.getNickname() + " from ip: " + socket.getInetAddress());
+        String messageJSON = gson.toJson(message);
         writer.println(messageJSON);
         writer.flush();
 
         this.support.firePropertyChange("MessageSent", null, message.getMessage());
+        System.out.println("2");
     }
 
     @Override
@@ -120,7 +130,7 @@ public class ChatClientImplementation implements ChatClient {
     }
 
     @Override
-    public void receiveBroadcast(String message) {
+    public synchronized void receiveBroadcast(String message) {
         try {
 
             System.out.println("Received message: " + message);
