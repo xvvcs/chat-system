@@ -22,6 +22,7 @@ public class ChatClientImplementation implements ChatClient {
     private final Gson gson;
     private final PropertyChangeSupport support;
     private final MessageListener listener;
+    private String nickname;
 
 
     public ChatClientImplementation(String host, int port) throws IOException{
@@ -29,7 +30,7 @@ public class ChatClientImplementation implements ChatClient {
         writer = StreamsFactory.createWriter(socket);
         reader = StreamsFactory.createReader(socket);
         gson = new Gson();
-
+        nickname = null;
         support = new PropertyChangeSupport(this);
         
          listener = new MessageListener(this, "230.0.0.0" , 8888);
@@ -42,9 +43,16 @@ public class ChatClientImplementation implements ChatClient {
         writer.println("Disconnect");
         writer.flush();
         String reply = reader.readLine();
+        String userLeft = nickname+ " has left the chat.";
+
         if (!reply.equals("Disconnected")) {
             throw new IOException("Protocol failure");
         }
+
+        Message message = new Message(userLeft);
+        String messageJSON = gson.toJson(message);
+        writer.println(messageJSON);
+        writer.flush();
 
         socket.close();
     }
@@ -58,12 +66,12 @@ public class ChatClientImplementation implements ChatClient {
             throw new IOException("Protocol failure");
         }
         User userLogin = new User(username, password);
+        nickname = userLogin.getNickname();
         String loginJSON = gson.toJson(userLogin);
         writer.println(loginJSON);
         writer.flush();
         reply = reader.readLine();
 
-        addUser(userLogin);
 
         return reply.equals("Approved");
     }
@@ -114,13 +122,13 @@ public class ChatClientImplementation implements ChatClient {
     @Override
     public void receiveBroadcast(String message) {
         try {
-            // Print the received message for debugging
+
             System.out.println("Received message: " + message);
 
-            // Attempt to parse the message as JSON
+
             Message messageObject = gson.fromJson(message, Message.class);
 
-            // If parsing succeeds, fire property change event
+
             support.firePropertyChange("result", null, messageObject);
         } catch (JsonSyntaxException e) {
             // If parsing fails, print the error and handle accordingly

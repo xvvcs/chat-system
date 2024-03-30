@@ -34,6 +34,7 @@ public class ChatViewController {
     @FXML public void onDisconnect()
     {
         chatViewModel.disconnect();
+        viewHandler.closeView();
     }
     @FXML public void onInformation()
     {
