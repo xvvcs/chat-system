@@ -1,9 +1,12 @@
 package main.chatsystem.Model;
 
 import java.util.Objects;
+import com.google.gson.annotations.SerializedName;
 
 public class User {
+    @SerializedName("nickname")
     private final String nickname;
+    @SerializedName("password")
     private final String password;
 
     public User(String nickname, String password) {

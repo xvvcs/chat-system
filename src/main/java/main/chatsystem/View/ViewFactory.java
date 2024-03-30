@@ -19,6 +19,7 @@ public class ViewFactory { // Oliwier zrobił z tego Singleton, ale nie wiem czy
         this.viewHandler = viewHandler;
         this.viewModelFactory = viewModelFactory;
         this.loginViewController = null;
+        this.chatViewController = null;
     }
 
     public Region loadStartView(){

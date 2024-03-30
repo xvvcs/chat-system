@@ -33,7 +33,7 @@ public class LoginViewController implements PropertyChangeListener {
     @FXML public void onStart(){
         if(!userNameField.getText().isEmpty() || !passwordField.getText().isEmpty())
         {
-            //viewHandler.openView(ViewFactory.CHAT);
+            viewHandler.openView(ViewFactory.CHAT);
             loginViewModel.login();
         }
         else

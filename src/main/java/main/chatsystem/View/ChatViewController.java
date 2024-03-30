@@ -24,8 +24,8 @@ public class ChatViewController {
         this.root = root;
 
 
-        loginViewModel.bindUsername(userNameField.textProperty());
-        loginViewModel.bindPassword(passwordField.textProperty());
+        chatViewModel.bindMessage(messageField.textProperty());
+        chatViewModel.bindMessageList(chatArea.itemsProperty());
     }
     @FXML public void onSend()
     {
@@ -37,7 +37,7 @@ public class ChatViewController {
     }
     @FXML public void onInformation()
     {
-        // ???
+        ///???
     }
     public Region getRoot(){
         return root;

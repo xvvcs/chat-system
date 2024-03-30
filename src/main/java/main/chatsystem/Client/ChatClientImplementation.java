@@ -1,6 +1,7 @@
 package main.chatsystem.Client;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import main.chatsystem.Model.Message;
 import main.chatsystem.Model.User;
 import main.chatsystem.Server.StreamsFactory;
@@ -57,7 +58,7 @@ public class ChatClientImplementation implements ChatClient {
             throw new IOException("Protocol failure");
         }
         User userLogin = new User(username, password);
-        String loginJSON = gson.toJson(userLogin + "logged in with ip: " + socket.getInetAddress());
+        String loginJSON = gson.toJson(userLogin);
         writer.println(loginJSON);
         writer.flush();
         reply = reader.readLine();
@@ -112,7 +113,14 @@ public class ChatClientImplementation implements ChatClient {
 
     @Override
     public void receiveBroadcast(String message) {
-        Result result = gson.fromJson(message, Result.class);
-        support.firePropertyChange("result", null, result);
-    }
+        try {
+            // Attempt to parse the message as JSON
+            Message messageObject = gson.fromJson(message, Message.class);
+            // If parsing succeeds, fire property change event
+            support.firePropertyChange("result", null, messageObject);
+        } catch (JsonSyntaxException e) {
+            // If parsing fails, print the error and handle accordingly
+            e.printStackTrace();
+            // Add your error handling logic here
+        }
 }
