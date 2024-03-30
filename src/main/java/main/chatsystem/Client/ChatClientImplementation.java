@@ -123,4 +123,5 @@ public class ChatClientImplementation implements ChatClient {
             e.printStackTrace();
             // Add your error handling logic here
         }
+    }
 }
