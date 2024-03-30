@@ -13,5 +13,5 @@ public interface ChatClient {
     void addUser(User user) throws IOException;
     void addPropertyChangeListener(PropertyChangeListener listener);
     void removePropertyChangeListener(PropertyChangeListener listener);
-    void receiveBroadcast(Object object);
+    void receiveBroadcast(String message);
 }

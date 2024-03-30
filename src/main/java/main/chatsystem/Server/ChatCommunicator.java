@@ -38,11 +38,14 @@ public class ChatCommunicator implements Runnable {
                 BufferedReader reader = StreamsFactory.createReader(socket);
                 PrintWriter writer = StreamsFactory.createWriter(socket);
                 String method = reader.readLine();
-                if (!method.equals("connect")) {
+                System.out.println("PROBUHJE POLACZYC");
+                if (method == null || !method.equals("connect")) {
                     writer.println("Disconnected");
                     writer.flush();
                     break;
                 }
+                System.out.println("POLACZYLO");
+                fileLog.log("User " + socket.getInetAddress() + " has connected.");
                 writer.println("login required");
                 writer.flush();
                 String loginData = reader.readLine();
@@ -56,9 +59,8 @@ public class ChatCommunicator implements Runnable {
 
                         //dodaje ziuta do Userow - PEWNIE NIE DZIALA
                         peopleLog.addUser(login);
-                        broadcaster.broadcast(peopleLog.toString());
 
-                        fileLog.log("User " + login.getNickname() + " has joined the chat."); // <<<<< TU POWINIEN BYC MESSAGE WYSLANY JSONEM
+                        fileLog.log(socket.getInetAddress()+" User " + login.getNickname() + " has joined the chat."); // <<<<< TU POWINIEN BYC MESSAGE WYSLANY JSONEM
                     }
                     else
                     {
@@ -71,6 +73,8 @@ public class ChatCommunicator implements Runnable {
                     {
                         writer.println("Disconnected");
                         writer.flush();
+                        broadcaster.broadcast(login.getNickname() + " has disconnected.");
+                        fileLog.log(socket.getInetAddress()+" User " + login.getNickname() + " has left the chat.");
                         break;
                     }
                     else if(reply.equals("Send message")) // Może się to zmienić podczas implementacji Java FX

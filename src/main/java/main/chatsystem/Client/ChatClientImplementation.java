@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import main.chatsystem.Model.Message;
 import main.chatsystem.Model.User;
 import main.chatsystem.Server.StreamsFactory;
+import main.chatsystem.Server.UDPBroadcaster;
 
 import javax.xml.transform.Result;
 import java.beans.PropertyChangeListener;
@@ -20,11 +21,14 @@ public class ChatClientImplementation implements ChatClient {
     private final Gson gson;
     private final PropertyChangeSupport support;
     private final MessageListener listener;
+
+
     public ChatClientImplementation(String host, int port) throws IOException{
         socket = new Socket(host,port);
         writer = StreamsFactory.createWriter(socket);
         reader = StreamsFactory.createReader(socket);
         gson = new Gson();
+
         support = new PropertyChangeSupport(this);
         
          listener = new MessageListener(this, "230.0.0.0" , 8888);
@@ -40,6 +44,7 @@ public class ChatClientImplementation implements ChatClient {
         if (!reply.equals("Disconnected")) {
             throw new IOException("Protocol failure");
         }
+
         socket.close();
     }
 
@@ -91,7 +96,8 @@ public class ChatClientImplementation implements ChatClient {
         writer.println(userJSON);
         writer.flush();
 
-        this.support.firePropertyChange("UserAdded", null, user.getNickname());
+
+       support.firePropertyChange("UserAdded", null, user.getNickname());
     }
 
     @Override
@@ -105,8 +111,8 @@ public class ChatClientImplementation implements ChatClient {
     }
 
     @Override
-    public void receiveBroadcast(Object object) {
-        Result result = gson.fromJson(object.toString(), Result.class);
+    public void receiveBroadcast(String message) {
+        Result result = gson.fromJson(message, Result.class);
         support.firePropertyChange("result", null, result);
     }
 }

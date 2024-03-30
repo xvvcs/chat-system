@@ -30,6 +30,7 @@ public class LoginViewController {
         if(!userNameField.getText().isEmpty() || !passwordField.getText().isEmpty())
         {
             //viewHandler.openView(ViewFactory.CHAT);
+            loginViewModel.login();
         }
         else
         {

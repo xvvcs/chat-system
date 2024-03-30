@@ -22,7 +22,7 @@ public class ViewFactory { // Oliwier zrobił z tego Singleton, ale nie wiem czy
     public Region loadStartView(){
         if(loginViewController == null){
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/main.chatsystem/StartView.fxml"));
+            loader.setLocation(getClass().getResource("/main/chatsystemResource/LoginView.fxml"));
             try {
                 Region root = loader.load();
                 loginViewController = loader.getController();

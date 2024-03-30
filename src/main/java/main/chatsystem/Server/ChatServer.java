@@ -8,12 +8,12 @@ import java.net.Socket;
 public class ChatServer {
     public static void main(String args[]) throws IOException
     {
-        final int PORT = 8080;
+
         System.out.println("Starting Server...");
-        System.out.println("Server IP: " + InetAddress.getLocalHost().getHostAddress());
+        System.out.println("Server IP: " + InetAddress.getLocalHost().getHostAddress() + " with port: 5678");
 
         // Creating server socket
-        ServerSocket serverSocket = new ServerSocket(PORT);
+        ServerSocket serverSocket = new ServerSocket(5678);
         UDPBroadcaster broadcaster = new UDPBroadcaster("230.0.0.0",8888);
         while(true)
         {
