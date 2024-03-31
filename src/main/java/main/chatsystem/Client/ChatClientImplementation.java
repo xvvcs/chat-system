@@ -74,6 +74,7 @@ public class ChatClientImplementation implements ChatClient {
         writer.flush();
         reply = reader.readLine();
 
+        support.firePropertyChange("UserAdded", null, userLogin);
         support.firePropertyChange("UserLoggedIn", null, userLogin);
         return reply.equals("Approved");
     }
@@ -97,9 +98,9 @@ public class ChatClientImplementation implements ChatClient {
         String reply = reader.readLine();
         if(!reply.equals("Provide message content"))
         {
-            System.out.println("chuj");
+            System.out.println("Sending message protocol failure");
         }
-        System.out.println("1");
+
         Message message = new Message(user.getNickname() + " : " + messageContent);
 
         String messageJSON = gson.toJson(message);
@@ -107,7 +108,7 @@ public class ChatClientImplementation implements ChatClient {
         writer.flush();
 
         this.support.firePropertyChange("MessageSent", null, message.getMessage());
-        System.out.println("2");
+
     }
 
     @Override
@@ -135,13 +136,10 @@ public class ChatClientImplementation implements ChatClient {
     public synchronized void receiveBroadcast(String message) {
         try {
 
-            System.out.println("Received message: " + message);
-
-
             Message messageObject = gson.fromJson(message, Message.class);
 
 
-            support.firePropertyChange("result", null, messageObject);
+            support.firePropertyChange("broadcast", null, messageObject);
         } catch (JsonSyntaxException e) {
             // If parsing fails, print the error and handle accordingly
             e.printStackTrace();

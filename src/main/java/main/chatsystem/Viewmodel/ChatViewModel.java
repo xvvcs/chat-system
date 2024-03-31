@@ -48,8 +48,6 @@ public class ChatViewModel implements PropertyChangeListener {
         try
         {
             model.sendMessage(message.get(), user);
-            messages.add(new Message(getNickname()+": "+message.get()));
-            message.set("");
         }
         catch (Exception e)
         {
@@ -74,7 +72,7 @@ public class ChatViewModel implements PropertyChangeListener {
     }
     public void bindMessageList(ObjectProperty<ObservableList<Message>> property)
     {
-        messages.bindBidirectional(property);
+        messages.bind(property);
     }
 
     public StringProperty errorProperty() {
@@ -93,6 +91,11 @@ public class ChatViewModel implements PropertyChangeListener {
                 user = (User) evt.getNewValue();
                 support.firePropertyChange("UserLoggedIn", null, user);
             }
+            else if (evt.getPropertyName().equals(("broadcast"))){
+                Message message1 = (Message) evt.getNewValue();
+                messages.add(message1);
+            }
+
         });
     }
 

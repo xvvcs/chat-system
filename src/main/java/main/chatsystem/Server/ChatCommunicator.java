@@ -58,8 +58,9 @@ public class ChatCommunicator implements Runnable {
                             System.out.println("Logged successfully");
                             writer.flush();
 
-
-                            broadcaster.broadcast(loginData); //User data in broadacaster
+                            Message message = new Message(username + " has joined the chat");
+                            String joinBroadcast = gson.toJson(message);
+                            broadcaster.broadcast(joinBroadcast); //User data in broadacaster
 
 
 
@@ -94,9 +95,7 @@ public class ChatCommunicator implements Runnable {
                 if (firstReply.equals("Send message")) {
                     writer.println("Provide message content");
                     writer.flush();
-                    System.out.println("3");
                     String messageContent = reader.readLine();
-                    System.out.println("4");
                     Message jSonMessage = gson.fromJson(messageContent, Message.class);
                     broadcaster.broadcast(messageContent);
 

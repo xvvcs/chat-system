@@ -57,11 +57,13 @@ public class ModelManager implements Model, PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         Platform.runLater(() -> {
             if ("UserAdded".equals(evt.getPropertyName())) {
-                support.firePropertyChange("PersonAdded", null, evt.getNewValue());
+                support.firePropertyChange("UserAdded", null, evt.getNewValue());
             } else if ("MessageSent".equals(evt.getPropertyName())) {
                 support.firePropertyChange("MessageSent", null, evt.getNewValue());
             } else if ("UserLoggedIn".equals(evt.getPropertyName())){
                 support.firePropertyChange("UserLoggedIn", null, evt.getNewValue());
+            } else if("broadcast".equals(evt.getPropertyName())){
+                support.firePropertyChange("broadcast",null,evt.getNewValue());
             }
         });
     }

@@ -1,13 +1,16 @@
 package main.chatsystem.Viewmodel;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import main.chatsystem.Model.Model;
+import main.chatsystem.Model.User;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class LoginViewModel{
+public class LoginViewModel implements PropertyChangeListener{
     private final Model model;
     private final StringProperty userName;
     private final StringProperty password;
@@ -50,5 +53,14 @@ public class LoginViewModel{
     }
     public void removePropertyChangeListener(PropertyChangeListener listener){
         support.removePropertyChangeListener(listener);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Platform.runLater(() -> {
+            if ("UserLoggedIn".equals(evt.getPropertyName())){
+                support.firePropertyChange("UserLoggedIn", null, evt.getNewValue());
+            }
+        });
     }
 }
