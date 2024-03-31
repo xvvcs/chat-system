@@ -3,6 +3,7 @@ package main.chatsystem.Client;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import main.chatsystem.Model.Message;
+import main.chatsystem.Model.PeopleLog;
 import main.chatsystem.Model.User;
 import main.chatsystem.Server.StreamsFactory;
 import main.chatsystem.Server.UDPBroadcaster;
@@ -66,6 +67,7 @@ public class ChatClientImplementation implements ChatClient {
             throw new IOException("Protocol failure");
         }
         User userLogin = new User(username, password);
+        PeopleLog.getInstance().addUser(userLogin);
         nickname = userLogin.getNickname();
         String loginJSON = gson.toJson(userLogin);
         writer.println(loginJSON);

@@ -62,7 +62,6 @@ public class ChatCommunicator implements Runnable {
                             broadcaster.broadcast(loginData); //User data in broadacaster
 
 
-                            peopleLog.addUser(login);
 
                             fileLog.log(socket.getInetAddress() + " User " + login.getNickname() + " has joined the chat.");
                         }

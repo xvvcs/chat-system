@@ -56,6 +56,10 @@ public class ChatViewModel implements PropertyChangeListener {
             error.setValue(e.getMessage());
         }
     }
+    public void addMessage(String message){
+        Message messageNew = new Message(message);
+        messages.add(messageNew);
+    }
     public void disconnect()
     {
         try

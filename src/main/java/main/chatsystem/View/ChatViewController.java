@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import main.chatsystem.Model.Message;
+import main.chatsystem.Model.PeopleLog;
 import main.chatsystem.Viewmodel.ChatViewModel;
 
 public class ChatViewController {
@@ -43,7 +44,8 @@ public class ChatViewController {
     }
     @FXML public void onInformation()
     {
-        ///???
+        int size = PeopleLog.getInstance().getSize();
+        chatViewModel.addMessage(String.valueOf(size));
     }
     public Region getRoot(){
         return root;

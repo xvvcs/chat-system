@@ -28,6 +28,10 @@ public class PeopleLog implements Serializable {
             nicknames.add(user.getNickname());
         }
     }
+    public synchronized int getSize()
+    {
+        return users.size();
+    }
 
     public synchronized ArrayList<String> getNicknames(){
         return nicknames;
