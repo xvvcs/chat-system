@@ -101,7 +101,7 @@ public class ChatCommunicator implements Runnable {
                     Message jSonMessage = gson.fromJson(messageContent, Message.class);
                     broadcaster.broadcast(messageContent);
 
-                   // fileLog.log(socket.getInetAddress() + " User " + username + " has sent a message: "+jSonMessage.getMessage()); << DO LOGOW ZE WYSLAL WIADOMOSC
+                   fileLog.log(socket.getInetAddress() + " User " + username + " has sent a message: "+jSonMessage.getMessage());
 
                 }
             }

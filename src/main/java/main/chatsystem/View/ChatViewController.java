@@ -26,6 +26,11 @@ public class ChatViewController {
 
         chatViewModel.bindMessage(messageField.textProperty());
         chatViewModel.bindMessageList(chatArea.itemsProperty());
+
+        usernameLabel.setText(chatViewModel.getNickname());
+
+
+
     }
     @FXML public void onSend()
     {

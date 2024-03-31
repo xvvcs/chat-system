@@ -1,10 +1,7 @@
 package main.chatsystem.Viewmodel;
 
 import javafx.application.Platform;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.chatsystem.Model.Message;
@@ -18,7 +15,7 @@ import java.beans.PropertyChangeSupport;
 public class ChatViewModel implements PropertyChangeListener {
     private final Model model;
     private User user;
-    private final SimpleListProperty<Message> messages;
+    private final ListProperty<Message> messages;
     private final SimpleStringProperty message;
     private StringProperty error;
     private final PropertyChangeSupport support;
@@ -39,13 +36,19 @@ public class ChatViewModel implements PropertyChangeListener {
     }
 
     public String getNickname(){
-        return user.getNickname();
+        if(user!= null){
+            return user.getNickname();
+        }
+        else{
+            return "";
+        }
     }
     public void sendMessage()
     {
         try
         {
             model.sendMessage(message.get(), user);
+            messages.add(new Message(getNickname()+": "+message.get()));
             message.set("");
         }
         catch (Exception e)
@@ -69,6 +72,11 @@ public class ChatViewModel implements PropertyChangeListener {
     {
         messages.bindBidirectional(property);
     }
+
+    public StringProperty errorProperty() {
+        return error;
+    }
+
     public void bindMessage(StringProperty property)
     {
         message.bindBidirectional(property);
