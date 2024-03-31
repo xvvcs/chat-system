@@ -27,7 +27,7 @@ public class ViewHandler {
         }
         currentScene.setRoot(root);
         Object userData = root.getUserData();
-        primaryStage.setTitle(userData != null ? userData.toString() : "");
+        primaryStage.setTitle(userData != null ? userData.toString() : "Chat System");
         primaryStage.setScene(currentScene);
         primaryStage.sizeToScene();
         primaryStage.show();

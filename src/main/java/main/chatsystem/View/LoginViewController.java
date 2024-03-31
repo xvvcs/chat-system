@@ -31,7 +31,7 @@ public class LoginViewController implements PropertyChangeListener {
         loginViewModel.bindPassword(passwordField.textProperty());
     }
     @FXML public void onStart(){
-        if(!userNameField.getText().isEmpty() || !passwordField.getText().isEmpty())
+        if(!userNameField.getText().isEmpty() && !passwordField.getText().isEmpty())
         {
             viewHandler.openView(ViewFactory.CHAT);
             loginViewModel.login();

@@ -28,7 +28,11 @@ public class ChatViewController {
         chatViewModel.bindMessage(messageField.textProperty());
         chatViewModel.bindMessageList(chatArea.itemsProperty());
 
-        usernameLabel.setText(chatViewModel.getNickname());
+        chatViewModel.addPropertyChangeListener(evt -> {
+            if ("UserLoggedIn".equals(evt.getPropertyName())) {
+                usernameLabel.setText(chatViewModel.getNickname());
+            }
+        });
 
 
 
@@ -36,6 +40,7 @@ public class ChatViewController {
     @FXML public void onSend()
     {
         chatViewModel.sendMessage();
+        messageField.setText("");
     }
     @FXML public void onDisconnect()
     {
