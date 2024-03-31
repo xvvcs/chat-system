@@ -13,6 +13,7 @@ import main.chatsystem.Model.User;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 public class ChatViewModel implements PropertyChangeListener {
     private final Model model;
@@ -20,6 +21,7 @@ public class ChatViewModel implements PropertyChangeListener {
     private final SimpleListProperty<Message> messages;
     private final SimpleStringProperty message;
     private StringProperty error;
+    private final PropertyChangeSupport support;
     public ChatViewModel(Model model)
     {
         this.model = model;
@@ -28,6 +30,12 @@ public class ChatViewModel implements PropertyChangeListener {
         this.message = new SimpleStringProperty("");
         this.messages = new SimpleListProperty<>(FXCollections.observableArrayList());
         this.model.addPropertyChangeListener(this);
+        this.model.addPropertyChangeListener(evt -> {
+            if (evt.getPropertyName().equals("UserLoggedIn")){
+                user = (User) evt.getNewValue();
+            }
+        });
+        this.support = new PropertyChangeSupport(this);
     }
 
     public String getNickname(){
@@ -71,6 +79,7 @@ public class ChatViewModel implements PropertyChangeListener {
         Platform.runLater(() -> {
             if (evt.getPropertyName().equals("UserLoggedIn")){
                 user = (User) evt.getNewValue();
+                support.firePropertyChange("UserLoggedIn", null, user);
             }
         });
     }

@@ -93,7 +93,7 @@ public class ChatCommunicator implements Runnable {
                     break;
                 }
                 if (firstReply.equals("Send message")) {
-                    writer.println("a");
+                    writer.println("Provide message content");
                     writer.flush();
                     System.out.println("3");
                     String messageContent = reader.readLine();

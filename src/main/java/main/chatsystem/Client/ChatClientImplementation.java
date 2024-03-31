@@ -72,7 +72,7 @@ public class ChatClientImplementation implements ChatClient {
         writer.flush();
         reply = reader.readLine();
 
-
+        support.firePropertyChange("UserLoggedIn", null, userLogin);
         return reply.equals("Approved");
     }
 
@@ -93,7 +93,7 @@ public class ChatClientImplementation implements ChatClient {
             throw new IllegalArgumentException("Error while sending message: message is empty");
         }
         String reply = reader.readLine();
-        if(!reply.equals("a"))
+        if(!reply.equals("Provide message content"))
         {
             System.out.println("chuj");
         }
