@@ -21,6 +21,7 @@ public class ChatViewModel implements PropertyChangeListener {
     private final PropertyChangeSupport support;
     public ChatViewModel(Model model)
     {
+
         this.model = model;
         this.user = null;
         this.error = new SimpleStringProperty("");
@@ -37,7 +38,7 @@ public class ChatViewModel implements PropertyChangeListener {
 
     public String getNickname(){
         if(user!= null){
-            return user.getNickname();
+            return user.nickname();
         }
         else{
             return "";
@@ -82,6 +83,9 @@ public class ChatViewModel implements PropertyChangeListener {
     public void bindMessage(StringProperty property)
     {
         message.bindBidirectional(property);
+    }
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
     }
 
     @Override
