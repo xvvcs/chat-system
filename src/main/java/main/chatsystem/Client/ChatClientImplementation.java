@@ -6,9 +6,7 @@ import main.chatsystem.Model.Message;
 import main.chatsystem.Model.PeopleLog;
 import main.chatsystem.Model.User;
 import main.chatsystem.Server.StreamsFactory;
-import main.chatsystem.Server.UDPBroadcaster;
 
-import javax.xml.transform.Result;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
@@ -26,25 +24,25 @@ public class ChatClientImplementation implements ChatClient {
     private String nickname;
 
 
-    public ChatClientImplementation(String host, int port) throws IOException{
-        socket = new Socket(host,port);
+    public ChatClientImplementation(String host, int port) throws IOException {
+        socket = new Socket(host, port);
         writer = StreamsFactory.createWriter(socket);
         reader = StreamsFactory.createReader(socket);
         gson = new Gson();
         nickname = null;
         support = new PropertyChangeSupport(this);
-        
-         listener = new MessageListener(this, "230.0.0.0" , 8888);
-         Thread thread = new Thread(listener);
-         thread.start();
+
+        listener = new MessageListener(this, "230.0.0.0", 8888);
+        Thread thread = new Thread(listener);
+        thread.start();
     }
 
     @Override
-    public synchronized void  disconnect() throws IOException {
+    public synchronized void disconnect() throws IOException {
         writer.println("Disconnect");
         writer.flush();
         String reply = reader.readLine();
-        String userLeft = nickname+ " has left the chat.";
+        String userLeft = nickname + " has left the chat.";
 
         if (!reply.equals("Disconnected")) {
             throw new IOException("Protocol failure");
@@ -59,7 +57,7 @@ public class ChatClientImplementation implements ChatClient {
     }
 
     @Override
-    public  synchronized boolean login(String username, String password) throws IOException{
+    public synchronized boolean login(String username, String password) throws IOException {
         writer.println("connect");
         writer.flush();
         String reply = reader.readLine();
@@ -68,7 +66,7 @@ public class ChatClientImplementation implements ChatClient {
         }
         User userLogin = new User(username, password);
         PeopleLog.getInstance().addUser(userLogin);
-        nickname = userLogin.getNickname();
+        nickname = userLogin.nickname();
         String loginJSON = gson.toJson(userLogin);
         writer.println(loginJSON);
         writer.flush();
@@ -80,46 +78,44 @@ public class ChatClientImplementation implements ChatClient {
     }
 
     @Override
-    public synchronized void sendMessage(String messageContent, User user) throws IOException{
+    public synchronized void sendMessage(String messageContent, User user) throws IOException {
 
         writer.println("Send message");
         writer.flush();
 
-        /* User jest null i przez to nie da się wysłać wiadomości */
 
-        if (user == null){
+        if (user == null) {
             System.out.println("user null");
             throw new IllegalArgumentException("Error while sending message: user is null");
         }
-        if (messageContent == null){
+        if (messageContent == null) {
             System.out.println("message null");
             throw new IllegalArgumentException("Error while sending message: message is empty");
         }
         String reply = reader.readLine();
-        if(!reply.equals("Provide message content"))
-        {
+        if (!reply.equals("Provide message content")) {
             System.out.println("Sending message protocol failure");
         }
 
-        Message message = new Message(user.getNickname() + " : " + messageContent);
+        Message message = new Message(user.nickname() + " : " + messageContent);
 
         String messageJSON = gson.toJson(message);
         writer.println(messageJSON);
         writer.flush();
 
-        this.support.firePropertyChange("MessageSent", null, message.getMessage());
+        this.support.firePropertyChange("MessageSent", null, message.message());
 
     }
 
     @Override
     public void addUser(User user) throws IOException {
-        String userJSON = gson.toJson( user + "joined chat with ip: " + socket.getInetAddress());
+        String userJSON = gson.toJson(user + "joined chat with ip: " + socket.getInetAddress());
 
         writer.println(userJSON);
         writer.flush();
 
 
-       support.firePropertyChange("UserAdded", null, user.getNickname());
+        support.firePropertyChange("UserAdded", null, user.nickname());
     }
 
     @Override
@@ -141,9 +137,7 @@ public class ChatClientImplementation implements ChatClient {
 
             support.firePropertyChange("broadcast", null, messageObject);
         } catch (JsonSyntaxException e) {
-            // If parsing fails, print the error and handle accordingly
             e.printStackTrace();
-            // Add your error handling logic here
         }
     }
 }
