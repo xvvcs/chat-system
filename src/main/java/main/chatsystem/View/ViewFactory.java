@@ -7,7 +7,7 @@ import main.chatsystem.Viewmodel.ViewModelFactory;
 import java.io.IOError;
 import java.io.IOException;
 
-public class ViewFactory { // Oliwier zrobił z tego Singleton, ale nie wiem czy to potrzebne
+public class ViewFactory {
     public static final String LOGIN = "login";
     public static final String CHAT = "chat";
     private final ViewHandler viewHandler;
@@ -39,19 +39,19 @@ public class ViewFactory { // Oliwier zrobił z tego Singleton, ale nie wiem czy
     }
 
     public Region loadChatView(){
-        if(chatViewController == null){ // braKUJE VIEWMODELU
+        if(chatViewController == null){
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/main/chatsystemResource/ChatView.fxml"));
             try {
                 Region root = loader.load();
-                chatViewController = loader.getController(); // braKUJE VIEWMODELU
-                chatViewController.init(viewHandler, viewModelFactory.getChatViewModel(), root); // braKUJE VIEWMODELU
+                chatViewController = loader.getController();
+                chatViewController.init(viewHandler, viewModelFactory.getChatViewModel(), root);
                 return root;
             } catch (IOException e) {
                 throw new IOError(e);
             }
         }
-        return chatViewController.getRoot(); // braKUJE VIEWMODELU
+        return chatViewController.getRoot();
     }
 
 

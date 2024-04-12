@@ -25,7 +25,7 @@ public class PeopleLog implements Serializable {
     public synchronized void addUser(User user){
         if (!users.contains(user)) {
             users.add(user);
-            nicknames.add(user.getNickname());
+            nicknames.add(user.nickname());
         }
     }
     public synchronized int getSize()

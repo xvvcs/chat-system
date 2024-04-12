@@ -9,7 +9,7 @@ public class ChatServer {
     public static void main(String args[]) throws IOException
     {
 
-        System.out.println("Starting Server...");
+        System.out.println("S   tarting Server...");
         System.out.println("Server IP: " + InetAddress.getLocalHost().getHostAddress() + " with port: 5678");
 
         // Creating server socket

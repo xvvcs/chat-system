@@ -9,8 +9,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ModelManager implements Model, PropertyChangeListener {
     private final PropertyChangeSupport support;
@@ -40,7 +38,7 @@ public class ModelManager implements Model, PropertyChangeListener {
     @Override
     public void sendMessage(String content, User user) throws IOException, InterruptedException {
         Message message = new Message(content);
-        client.sendMessage(message.getMessage(), user);
+        client.sendMessage(message.message(), user);
     }
 
     @Override

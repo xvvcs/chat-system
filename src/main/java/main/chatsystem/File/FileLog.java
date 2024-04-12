@@ -30,7 +30,7 @@ public class FileLog {
 
     public void log(String message) throws IOException {
         try (FileWriter fileWriter = new FileWriter(getLogFile(), true);
-             PrintWriter writer = new PrintWriter(fileWriter)) {
+            PrintWriter writer = new PrintWriter(fileWriter)) {
             String logLine = currentTime.getFormattedTime() + " - " + message;
             writer.println(logLine);
         }

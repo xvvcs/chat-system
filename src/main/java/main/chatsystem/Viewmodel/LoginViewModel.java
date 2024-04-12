@@ -15,8 +15,6 @@ public class LoginViewModel implements PropertyChangeListener{
     private final StringProperty userName;
     private final StringProperty password;
     private StringProperty message;
-
-
     private final PropertyChangeSupport support;
 
     public LoginViewModel(Model model)

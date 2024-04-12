@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import main.chatsystem.File.FileLog;
 import main.chatsystem.Model.Message;
-import main.chatsystem.Model.Model;
 import main.chatsystem.Model.PeopleLog;
 import main.chatsystem.Model.User;
 
@@ -51,8 +50,8 @@ public class ChatCommunicator implements Runnable {
                     String loginData = reader.readLine();
                     try {
                         User login = gson.fromJson(loginData, User.class);
-                        username = login.getNickname();
-                        if (!login.getNickname().isEmpty() || !login.getPassword().isEmpty())
+                        username = login.nickname();
+                        if (!login.nickname().isEmpty() || !login.password().isEmpty())
                         {
                             writer.println("Approved");
                             System.out.println("Logged successfully");
@@ -60,11 +59,11 @@ public class ChatCommunicator implements Runnable {
 
                             Message message = new Message(username + " has joined the chat");
                             String joinBroadcast = gson.toJson(message);
-                            broadcaster.broadcast(joinBroadcast); //User data in broadacaster
+                            broadcaster.broadcast(joinBroadcast);
 
 
 
-                            fileLog.log(socket.getInetAddress() + " User " + login.getNickname() + " has joined the chat.");
+                            fileLog.log(socket.getInetAddress() + " User " + login.nickname() + " has joined the chat.");
                         }
                         else
                         {
@@ -99,7 +98,7 @@ public class ChatCommunicator implements Runnable {
                     Message jSonMessage = gson.fromJson(messageContent, Message.class);
                     broadcaster.broadcast(messageContent);
 
-                   fileLog.log(socket.getInetAddress() + " User " + username + " has sent a message: "+jSonMessage.getMessage());
+                    fileLog.log(socket.getInetAddress() + " User " + username + " has sent a message: "+jSonMessage.message());
 
                 }
             }
