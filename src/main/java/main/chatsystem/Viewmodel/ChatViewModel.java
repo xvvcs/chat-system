@@ -19,6 +19,7 @@ public class ChatViewModel implements PropertyChangeListener {
     private final SimpleStringProperty message;
     private StringProperty error;
     private final PropertyChangeSupport support;
+    private int size;
     public ChatViewModel(Model model)
     {
 
@@ -59,6 +60,11 @@ public class ChatViewModel implements PropertyChangeListener {
         Message messageNew = new Message(message);
         messages.add(messageNew);
     }
+
+    public int getSize() {
+        return size;
+    }
+
     public void disconnect()
     {
         try
@@ -98,6 +104,8 @@ public class ChatViewModel implements PropertyChangeListener {
             else if (evt.getPropertyName().equals(("broadcast"))){
                 Message message1 = (Message) evt.getNewValue();
                 messages.add(message1);
+            } else if (evt.getPropertyName().equals("UserCount")) {
+                size = (Integer) evt.getNewValue();
             }
 
         });

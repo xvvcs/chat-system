@@ -22,6 +22,7 @@ public class ChatClientImplementation implements ChatClient {
     private final PropertyChangeSupport support;
     private final MessageListener listener;
     private String nickname;
+    private int count;
 
 
     public ChatClientImplementation(String host, int port) throws IOException {
@@ -43,7 +44,8 @@ public class ChatClientImplementation implements ChatClient {
         writer.flush();
         String reply = reader.readLine();
         String userLeft = nickname + " has left the chat.";
-
+        count--;
+        support.firePropertyChange("UserCount",null, count);
         if (!reply.equals("Disconnected")) {
             throw new IOException("Protocol failure");
         }
@@ -65,7 +67,8 @@ public class ChatClientImplementation implements ChatClient {
             throw new IOException("Protocol failure");
         }
         User userLogin = new User(username, password);
-        PeopleLog.getInstance().addUser(userLogin);
+        count++;
+        support.firePropertyChange("UserCount",null, count);
         nickname = userLogin.nickname();
         String loginJSON = gson.toJson(userLogin);
         writer.println(loginJSON);

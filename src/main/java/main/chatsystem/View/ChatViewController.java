@@ -49,7 +49,7 @@ public class ChatViewController {
     }
     @FXML public void onInformation()
     {
-        int size = PeopleLog.getInstance().getSize();
+        int size = chatViewModel.getSize();
         chatViewModel.addMessage(String.valueOf(size));
     }
     public Region getRoot(){
