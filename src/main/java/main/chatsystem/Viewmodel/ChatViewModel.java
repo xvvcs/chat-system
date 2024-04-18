@@ -105,7 +105,8 @@ public class ChatViewModel implements PropertyChangeListener {
                 Message message1 = (Message) evt.getNewValue();
                 messages.add(message1);
             } else if (evt.getPropertyName().equals("UserCount")) {
-                size = (Integer) evt.getNewValue();
+                support.firePropertyChange("UserCount",null,evt.getNewValue());
+                size = (int) evt.getNewValue();
             }
 
         });
