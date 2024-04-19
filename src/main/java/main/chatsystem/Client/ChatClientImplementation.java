@@ -22,7 +22,6 @@ public class ChatClientImplementation implements ChatClient {
     private final PropertyChangeSupport support;
     private final MessageListener listener;
     private String nickname;
-    private int count;
 
 
     public ChatClientImplementation(String host, int port) throws IOException {
@@ -44,8 +43,6 @@ public class ChatClientImplementation implements ChatClient {
         writer.flush();
         String reply = reader.readLine();
         String userLeft = nickname + " has left the chat.";
-        count--;
-        support.firePropertyChange("UserCount",null, count);
         if (!reply.equals("Disconnected")) {
             throw new IOException("Protocol failure");
         }
@@ -67,8 +64,6 @@ public class ChatClientImplementation implements ChatClient {
             throw new IOException("Protocol failure");
         }
         User userLogin = new User(username, password);
-        count++;
-        support.firePropertyChange("UserCount",null, count);
         nickname = userLogin.nickname();
         String loginJSON = gson.toJson(userLogin);
         writer.println(loginJSON);
@@ -134,11 +129,15 @@ public class ChatClientImplementation implements ChatClient {
     @Override
     public synchronized void receiveBroadcast(String message) {
         try {
-
-            Message messageObject = gson.fromJson(message, Message.class);
-
-
-            support.firePropertyChange("broadcast", null, messageObject);
+            if (message.charAt(0) == 'M')
+            {
+                Message messageObject = gson.fromJson(message.substring(1), Message.class);
+                support.firePropertyChange("broadcast", null, messageObject);
+            }
+            else if (message.charAt(0) == 'C') {
+                int counter = gson.fromJson(message.substring(1), Integer.class);
+                support.firePropertyChange("UserCount", null, counter);
+            }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }

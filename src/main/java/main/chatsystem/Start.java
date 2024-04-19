@@ -13,7 +13,7 @@ import main.chatsystem.Viewmodel.ViewModelFactory;
 public class Start extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ChatClient client = new ChatClientImplementation("localhost", 5678);
+        ChatClient client = new ChatClientImplementation("localhost", 5679);
         Model model = new ModelManager();
         ViewModelFactory viewModelFactory = new ViewModelFactory(model);
         ViewHandler viewHandler = new ViewHandler(viewModelFactory);

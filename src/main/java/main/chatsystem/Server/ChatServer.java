@@ -13,7 +13,7 @@ public class ChatServer {
         System.out.println("Server IP: " + InetAddress.getLocalHost().getHostAddress() + " with port: 5678");
 
         // Creating server socket
-        ServerSocket serverSocket = new ServerSocket(5678);
+        ServerSocket serverSocket = new ServerSocket(5679);
         UDPBroadcaster broadcaster = new UDPBroadcaster("230.0.0.0",8888);
         while(true)
         {

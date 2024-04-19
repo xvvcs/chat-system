@@ -2,6 +2,7 @@ package main.chatsystem.Viewmodel;
 
 import javafx.application.Platform;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.chatsystem.Model.Message;
@@ -19,7 +20,6 @@ public class ChatViewModel implements PropertyChangeListener {
     private final SimpleStringProperty message;
     private StringProperty error;
     private final PropertyChangeSupport support;
-    private int size;
     public ChatViewModel(Model model)
     {
 
@@ -59,10 +59,6 @@ public class ChatViewModel implements PropertyChangeListener {
     public void addMessage(String message){
         Message messageNew = new Message(message);
         messages.add(messageNew);
-    }
-
-    public int getSize() {
-        return size;
     }
 
     public void disconnect()
@@ -106,7 +102,6 @@ public class ChatViewModel implements PropertyChangeListener {
                 messages.add(message1);
             } else if (evt.getPropertyName().equals("UserCount")) {
                 support.firePropertyChange("UserCount",null,evt.getNewValue());
-                size = (int) evt.getNewValue();
             }
 
         });

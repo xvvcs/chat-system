@@ -9,6 +9,7 @@ import java.net.Socket;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import main.chatsystem.File.FileLog;
+import main.chatsystem.Model.Counter;
 import main.chatsystem.Model.Message;
 import main.chatsystem.Model.PeopleLog;
 import main.chatsystem.Model.User;
@@ -17,6 +18,7 @@ public class ChatCommunicator implements Runnable {
     private final Socket socket;
     private final UDPBroadcaster broadcaster;
     private final Gson gson;
+    private final Counter counter;
 
     private FileLog fileLog;
     private File file;
@@ -31,6 +33,7 @@ public class ChatCommunicator implements Runnable {
         this.peopleLog = PeopleLog.getInstance();
         this.file = new File("src/main/java/main/chatsystem/File/ChatLog");
         this.fileLog = FileLog.getInstance(file);
+        this.counter = Counter.getInstance();
     }
 
     @Override
@@ -56,12 +59,13 @@ public class ChatCommunicator implements Runnable {
                             writer.println("Approved");
                             System.out.println("Logged successfully");
                             writer.flush();
+                            counter.increase();
 
                             Message message = new Message(username + " has joined the chat");
-                            String joinBroadcast = gson.toJson(message);
+                            String joinBroadcast = gson.toJson("M" + message);
                             broadcaster.broadcast(joinBroadcast);
-
-
+                            String jsonCounter = gson.toJson(counter.getCounter());
+                            broadcaster.broadcast("C" + jsonCounter);
 
                             fileLog.log(socket.getInetAddress() + " User " + login.nickname() + " has joined the chat.");
                         }
@@ -84,9 +88,13 @@ public class ChatCommunicator implements Runnable {
 
                     writer.println("Disconnected");
                     writer.flush();
+                    counter.decrease();
 
                     String leftBroadcast = reader.readLine();
-                    broadcaster.broadcast(leftBroadcast);
+                    broadcaster.broadcast("M" + leftBroadcast);
+
+                    String jsonCounter = gson.toJson(counter.getCounter());
+                    broadcaster.broadcast("C" + jsonCounter);
 
                     fileLog.log(socket.getInetAddress() + " User " + username + " has left the chat.");
                     break;
